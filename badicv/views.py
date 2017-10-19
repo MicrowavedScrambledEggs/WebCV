@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
+from . import models
+
 # Create your views here.
 def experience_description(request, experi_name):
+    models.Experience.objects.get(name=experi_name)
     return HttpResponse("Experience page for %s." % experi_name)
 
 def experience_search(request):
@@ -18,4 +21,4 @@ def referee_list(request):
     return HttpResponse("Referee list")
 
 def index(request):
-    return HttpResponse("Home Page")
+    return render(request, 'badicv/index.html')
