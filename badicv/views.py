@@ -14,13 +14,22 @@ def experience_search(request):
                   context={"exes": models.Experience.objects.all()})
 
 def skill_description(request, skill_name):
-    return HttpResponse("Skill description page for %s." % skill_name)
+    skill = models.Skill.objects.get(name=skill_name)
+    return render(request, 'badicv/skill_description.html', 
+                  context={"skill": skill})
 
 def skill_search(request):
-    return HttpResponse("Search page for skills")
+    return render(request, 'badicv/skill_search.html', 
+                  context={"skills": models.Skill.objects.all()})
 
 def referee_list(request):
-    return HttpResponse("Referee list")
+    return render(request, 'badicv/referee_list.html', 
+                  context={"refs": models.Referee.objects.all()})
+
+def referee_description(request, referee_name):
+    ref = models.Referee.objects.get(name=referee_name)
+    return render(request, 'badicv/referee_description.html',
+                  context={"ref": ref})
 
 def index(request):
     return render(request, 'badicv/index.html')

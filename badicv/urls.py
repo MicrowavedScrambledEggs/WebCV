@@ -15,5 +15,7 @@ urlpatterns = [
     url(r'^skill/$', views.skill_search, name='skill search'),
     url(r'^skill/(?P<skill_name>.+)/$', views.skill_description, 
         name='skill description'),
-    url(r'^referees/$', views.referee_list, name='referee list'),
+    url(r'^referee/$', views.referee_list, name='referee list'),
+    url(r'^referee/(?P<referee_name>.+)/$', views.referee_description, 
+        name='referee description'),
 ]

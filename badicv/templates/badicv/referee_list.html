@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Badi James CV Referees</title>
+</head>
+<body>
+
+<ul>
+{% for ref in refs %}
+	<li><b><a href="/referee/{{ref.name}}/">{{ref.name}}</a></b>
+	<p>{{ref.description}}</p>
+	<p>{{ref.phone_number}}<br>
+	{{ref.email}}</p></li>
+{% endfor %}
+</ul>
+
+
+</body>

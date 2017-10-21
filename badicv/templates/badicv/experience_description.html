@@ -16,26 +16,27 @@
 
 <h2>Skills Used</h2>
 
+<ul>
 {% for skill in ex.experiencewithskill_set.all %}
-
+	<li>
 	<h3><a href="/skill/{{skill.skill_name}}/">{{skill.skill_name}}</a></h3>
 	
 	<p>{{skill.description}}</p>
-
+	</li>
 {% endfor %}
+</ul>
 
-<h2> Related Referees </h2>
-
-{% for ref in ex.referee_set.all %}
-	
-	<h3>{{ref.name}}</h3>
-	
-	<p>{{ref.description}}</p>
-	
-	<p>{% if ref.phone_number %}{{ref.phone_number}}{% endif %}<br>
-	{% if ref.email %}{{ref.email}}{% endif %}</p>
-	
-{% endfor %}
+{% if ex.referee_set.all %}
+	<h2> Related Referees </h2>
+	<ul>
+	{% for ref in ex.referee_set.all %}
+		
+		<li><a href="/referee/{{ref.name}}/"><b>{{ref.name}}</b></a><br>
+		{% if ref.phone_number %}{{ref.phone_number}}{% endif %}<br>
+		{% if ref.email %}{{ref.email}}{% endif %}</li>
+		
+	{% endfor %}
+{% endif %}
 
 </body>
 </html>
