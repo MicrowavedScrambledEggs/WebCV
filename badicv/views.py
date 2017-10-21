@@ -5,11 +5,13 @@ from . import models
 
 # Create your views here.
 def experience_description(request, experi_name):
-    models.Experience.objects.get(name=experi_name)
-    return HttpResponse("Experience page for %s." % experi_name)
+    ex = models.Experience.objects.get(name=experi_name)
+    return render(request, 'badicv/experience_description.html', 
+                  context={"ex": ex})
 
 def experience_search(request):
-    return HttpResponse("Search page for experiences")
+    return render(request, 'badicv/experience_search.html', 
+                  context={"exes": models.Experience.objects.all()})
 
 def skill_description(request, skill_name):
     return HttpResponse("Skill description page for %s." % skill_name)

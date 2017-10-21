@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Badi James CV Experiences</title>
+</head>
+<body>
+
+<ul>
+{% for ex in exes %}
+	<li><a href="/experience/{{ex.name}}/">{{ex.name}}</a></li>
+{% endfor %}
+</ul>
+
+
+</body>

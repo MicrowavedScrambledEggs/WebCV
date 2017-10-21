@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Badi James CV {{ex.name}}</title>
+</head>
+<body>
+
+<h1>{{ex.name}}</h1>
+
+<h2>{{ex.location}}</h2>
+
+<p>{% if ex.start_date %}<b>Start Date:</b> {{ex.start_date}}{% endif %}<br>
+{% if ex.end_date %}<b>End Date:</b> {{ex.end_date}} {% endif %}</p>
+
+<p>{{ex.description}}</p>
+
+<h2>Skills Used</h2>
+
+{% for skill in ex.experiencewithskill_set.all %}
+
+	<h3><a href="/skill/{{skill.skill_name}}/">{{skill.skill_name}}</a></h3>
+	
+	<p>{{skill.description}}</p>
+
+{% endfor %}
+
+<h2> Related Referees </h2>
+
+{% for ref in ex.referee_set.all %}
+	
+	<h3>{{ref.name}}</h3>
+	
+	<p>{{ref.description}}</p>
+	
+	<p>{% if ref.phone_number %}{{ref.phone_number}}{% endif %}<br>
+	{% if ref.email %}{{ref.email}}{% endif %}</p>
+	
+{% endfor %}
+
+</body>
+</html>
