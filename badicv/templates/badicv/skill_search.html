@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Badi James CV Skills</title>
+</head>
+<body>
+
+<ul>
+{% for skill in skills %}
+	<li><a href="/skill/{{skill.name}}/">{{skill.name}}</a></li>
+{% endfor %}
+</ul>
+
+
+</body>
