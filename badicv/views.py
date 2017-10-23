@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from . import models
+from . import models, forms
 
 # Create your views here.
 def experience_description(request, experi_name):
@@ -10,8 +10,14 @@ def experience_description(request, experi_name):
                   context={"ex": ex})
 
 def experience_search(request):
+    form = forms.ExperienceSearchForm(request.GET)
+    exes = models.Experience.objects.all() # if nothing searched, show all
+    if 'search_term' in request.GET:
+        exes = exes.filter(name__contains=request.GET['search_term'])
+    if 'type' in request.GET:
+        exes = exes.filter(type=request.GET['type'])
     return render(request, 'badicv/experience_search.html', 
-                  context={"exes": models.Experience.objects.all()})
+                  context={"exes": exes, "form" : form})
 
 def skill_description(request, skill_name):
     skill = models.Skill.objects.get(name=skill_name)

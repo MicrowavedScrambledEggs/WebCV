@@ -5,6 +5,11 @@
 </head>
 <body>
 
+<form action="{% url 'badicv:experience search' %}" method="get">
+	{{ form }}
+	<input type="submit" value="Search">
+</form>
+
 <ul>
 {% for ex in exes %}
 	<li><a href="/experience/{{ex.name}}/">{{ex.name}}</a></li>
