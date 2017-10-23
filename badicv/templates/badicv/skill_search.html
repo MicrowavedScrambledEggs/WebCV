@@ -5,6 +5,11 @@
 </head>
 <body>
 
+<form action="{% url 'badicv:skill search' %}" method="get">
+	{{ form }}
+	<input type="submit" value="Search">
+</form>
+
 <ul>
 {% for skill in skills %}
 	<li><a href="/skill/{{skill.name}}/">{{skill.name}}</a></li>
