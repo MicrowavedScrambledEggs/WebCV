@@ -47,16 +47,22 @@ class ExperienceWithSkill(models.Model):
 class Referee(models.Model):
     name = models.CharField(max_length=32)
     description = models.TextField()
-    email = models.EmailField(blank=True)
-    phone_regex = RegexValidator(regex=r'^\+?\d{0,2} ?\d? ?\d{3} ?\d{4}$', 
-        message="Phone number must be entered in the format: '+999999999' or '+99 9 999 9999'")
-    phone_number = models.CharField(validators=[phone_regex], max_length=15, blank=True) # validators should be a list
     experiences = models.ManyToManyField(Experience)
     
     def __str__(self):
         return self.name
-
     
+
+class Phone(models.Model):
+    referee = models.ForeignKey(Referee, on_delete=models.CASCADE)
+    phone_regex = RegexValidator(regex=r'^\+?\d{0,2} ?\d? ?\d{3} ?\d{4}$', 
+        message="Phone number must be entered in the format: '+999999999' or '+99 9 999 9999'")
+    phone_number = models.CharField(validators=[phone_regex], max_length=15, blank=True)
+
+
+class Email(models.Model):
+    referee = models.ForeignKey(Referee, on_delete=models.CASCADE)
+    email = models.EmailField()
     
 
     
