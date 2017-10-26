@@ -230,6 +230,124 @@ class ExperienceSearchViewTests(TestCase):
     def test_search_ordering_part_match(self):
         self.assertTrue(False)
         
+
+class SkillSearchViewTests(TestCase):
+    
+    def test_invalid_skills_no_experience(self):
+        """
+        Test that skills without associated experiences do not show up in the 
+        view
+        """
+        ex, skill = generic_experience_and_skill()
+        generic_skill(name="skill two")
+        response = self.client.get(reverse('badicv:skill search'))
+        self.assertListEqual(response.context['skills'], [skill])
+        
+    def test_invalid_skills_no_type(self):
+        """
+        Test that skills without at least one type do not show up in the view
+        """
+        ex, skill = generic_experience_and_skill()
+        models.Skill.objects.create(name="name", description="description")
+        response = self.client.get(reverse('badicv:skill search'))
+        self.assertListEqual(response.context['skills'], [skill])
+        
+    def test_search_searchterm_no_part_word(self):
+        """
+        test that only whole word matches turn up in the search and not
+        part word matches
+        """
+        ex, skill = generic_experience_and_skill()
+        response = self.client.get(
+            reverse('badicv:skill search'), {"search_term": "clea"})
+        self.assertListEqual(response.context['skills'], [])
+        
+    def test_no_search(self):
+        """
+        Test that full list of skills shows when no search made.
+        NOTE: may change no search behaviour in future to show just key skills
+        """
+        ex, skill = generic_experience_and_skill()
+        response = self.client.get(reverse('badicv:skill search'))
+        self.assertListEqual(response.context['skills'], [skill])
+        
+    def test_search_type(self):
+        """
+        Test that search results get filtered by type selected
+        """
+        ex, skill = generic_experience_and_skill()
+        ex2, skill2 = generic_experience_and_skill(
+            name=ex_name_2, sname="skill two", stype="technical")
+        response = self.client.get(
+            reverse('badicv:skill search'), {"type": "hygiene"})
+        self.assertListEqual(response.context['skills'], [skill])
+        
+    def test_search_searchterm_name(self):
+        """
+        Tests that search term is found in skill name and results are filtered
+        accordingly
+        """
+        ex, skill = generic_experience_and_skill()
+        ex2, skill2 = generic_experience_and_skill(
+            name=ex_name_2, sname="skill two", stype="technical")
+        response = self.client.get(
+            reverse('badicv:skill search'), {"search_term": "two"})
+        self.assertListEqual(response.context['skills'], [skill2])
+
+    def test_search_type_searchterm_name(self):
+        """
+        Tests that search term is found in skill name and results are filtered
+        by both search term and type
+        """
+        ex, skill = generic_experience_and_skill()
+        ex2, skill2 = generic_experience_and_skill(
+            name=ex_name_2, sname="skill two", stype="technical")
+        ex3, skill3 = generic_experience_and_skill(
+            name=ex_name_2, sname="skill three", stype="hygiene")
+        response = self.client.get(
+            reverse('badicv:skill search'), 
+            {"search_term": "skill", "type": "technical"})
+        self.assertListEqual(response.context['skills'], [skill2])
+        
+    def test_search_searchterm_description(self):
+        """
+        Tests that search term is found in skill description and results are 
+        filtered accordingly
+        """
+        ex, skill = generic_experience_and_skill()
+        ex2, skill2 = generic_experience_and_skill(
+            name=ex_name_2, sname="skill two", sdescription= "description")
+        response = self.client.get(
+            reverse('badicv:skill search'), {"search_term": "good"})
+        self.assertListEqual(response.context['skills'], [skill2])
+        
+    def test_search_searchterm_experience(self):
+        """
+        Tests that search term is found in names of associated experiences and 
+        results are filtered accordingly
+        """
+        ex, skill = generic_experience_and_skill()
+        ex2, skill2 = generic_experience_and_skill(
+            name=ex_name_2, sname="skill two")
+        response = self.client.get(
+            reverse('badicv:skill search'), {"search_term": "Dish"})
+        self.assertListEqual(response.context['skills'], [skill2])
+        
+    def test_search_searchterm_experiencewithskill_descripition(self):
+        """
+        Tests that search term is found in descriptions of experience with skill
+        and results are filtered accordingly
+        """
+        ex, skill = generic_experience_and_skill()
+        ex2, skill2 = generic_experience_and_skill(
+            name=ex_name_2, sname="skill two", exsdescription= "banana")
+        response = self.client.get(
+            reverse('badicv:skill search'), {"search_term": "banana"})
+        self.assertListEqual(response.context['skills'], [skill2])
+        
+        
+        
+        
     
         
      
