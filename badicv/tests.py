@@ -20,8 +20,10 @@ def generic_experience(
 def generic_referee(
         name="Jamie Sam", description="supervisor at new world", 
         email ="jamie.sam@jamiesam.com", phone="+6449999999"):
-    return models.Referee.objects.create(
-        name=name, description=description, email=email, phone=phone)
+    ref = models.Referee.objects.create(name=name, description=description)
+    models.Email.objects.create(email=email, referee=ref)
+    models.Phone.objects.create(phone_number=phone, referee=ref)
+    return ref
     
 def generic_skill(
         name="cleaning", stype="hygiene", 
@@ -97,8 +99,9 @@ class ExperienceSearchViewTests(TestCase):
         
     def test_valid_experience_2(self):
         """
-        Checks experiences with skills shows up in the experience search context
-        when no search has been performed
+        Checks all experiences with skills shows up in the experience search 
+        context when no search has been performed
+        Note: may change behaviour in future to just show key experiences
         """
         set_up_experience_search()
         response = self.client.get(reverse('badicv:experience search'))
@@ -241,7 +244,7 @@ class SkillSearchViewTests(TestCase):
         ex, skill = generic_experience_and_skill()
         generic_skill(name="skill two")
         response = self.client.get(reverse('badicv:skill search'))
-        self.assertListEqual(response.context['skills'], [skill])
+        self.assertQuerysetEqual(response.context['skills'], ['<Skill: %s>' % skill.name])
         
     def test_invalid_skills_no_type(self):
         """
@@ -250,7 +253,7 @@ class SkillSearchViewTests(TestCase):
         ex, skill = generic_experience_and_skill()
         models.Skill.objects.create(name="name", description="description")
         response = self.client.get(reverse('badicv:skill search'))
-        self.assertListEqual(response.context['skills'], [skill])
+        self.assertQuerysetEqual(response.context['skills'], ['<Skill: %s>' % skill.name])
         
     def test_search_searchterm_no_part_word(self):
         """
@@ -260,7 +263,7 @@ class SkillSearchViewTests(TestCase):
         ex, skill = generic_experience_and_skill()
         response = self.client.get(
             reverse('badicv:skill search'), {"search_term": "clea"})
-        self.assertListEqual(response.context['skills'], [])
+        self.assertQuerysetEqual(response.context['skills'], [])
         
     def test_no_search(self):
         """
@@ -269,7 +272,7 @@ class SkillSearchViewTests(TestCase):
         """
         ex, skill = generic_experience_and_skill()
         response = self.client.get(reverse('badicv:skill search'))
-        self.assertListEqual(response.context['skills'], [skill])
+        self.assertQuerysetEqual(response.context['skills'], ['<Skill: %s>' % skill.name])
         
     def test_search_type(self):
         """
@@ -280,7 +283,7 @@ class SkillSearchViewTests(TestCase):
             name=ex_name_2, sname="skill two", stype="technical")
         response = self.client.get(
             reverse('badicv:skill search'), {"type": "hygiene"})
-        self.assertListEqual(response.context['skills'], [skill])
+        self.assertQuerysetEqual(response.context['skills'], ['<Skill: %s>' % skill.name])
         
     def test_search_searchterm_name(self):
         """
@@ -292,7 +295,7 @@ class SkillSearchViewTests(TestCase):
             name=ex_name_2, sname="skill two", stype="technical")
         response = self.client.get(
             reverse('badicv:skill search'), {"search_term": "two"})
-        self.assertListEqual(response.context['skills'], [skill2])
+        self.assertQuerysetEqual(response.context['skills'], ['<Skill: %s>' % skill2.name])
 
     def test_search_type_searchterm_name(self):
         """
@@ -307,7 +310,7 @@ class SkillSearchViewTests(TestCase):
         response = self.client.get(
             reverse('badicv:skill search'), 
             {"search_term": "skill", "type": "technical"})
-        self.assertListEqual(response.context['skills'], [skill2])
+        self.assertQuerysetEqual(response.context['skills'], ['<Skill: %s>' % skill2.name])
         
     def test_search_searchterm_description(self):
         """
@@ -319,7 +322,7 @@ class SkillSearchViewTests(TestCase):
             name=ex_name_2, sname="skill two", sdescription= "description")
         response = self.client.get(
             reverse('badicv:skill search'), {"search_term": "good"})
-        self.assertListEqual(response.context['skills'], [skill2])
+        self.assertQuerysetEqual(response.context['skills'], ['<Skill: %s>' % skill.name])
         
     def test_search_searchterm_experience(self):
         """
@@ -331,7 +334,7 @@ class SkillSearchViewTests(TestCase):
             name=ex_name_2, sname="skill two")
         response = self.client.get(
             reverse('badicv:skill search'), {"search_term": "Dish"})
-        self.assertListEqual(response.context['skills'], [skill2])
+        self.assertQuerysetEqual(response.context['skills'], ['<Skill: %s>' % skill2.name])
         
     def test_search_searchterm_experiencewithskill_descripition(self):
         """
@@ -343,7 +346,65 @@ class SkillSearchViewTests(TestCase):
             name=ex_name_2, sname="skill two", exsdescription= "banana")
         response = self.client.get(
             reverse('badicv:skill search'), {"search_term": "banana"})
-        self.assertListEqual(response.context['skills'], [skill2])
+        self.assertQuerysetEqual(response.context['skills'], ['<Skill: %s>' % skill2.name])
+        
+    def test_searchterm_ordering_whole_term(self):
+        """
+        Test search results where the whole search term matches a skill's field
+        is ordered appropriately by which field matched
+        name > description > experience > experience with skill description
+        """
+        self.assertTrue(False)
+        
+    def test_searchterm_ordering_part_term(self):
+        """
+        Test search results where parts of a search term matches a skill's field
+        (and for each word in the search term there is a field of the skill with 
+        the word) is ordered appropriately by which field matched the most words
+        name > description > experience > experience with skill description
+        """
+        self.assertTrue(False)
+        
+    def test_searchterm_ordering_whole_part_term(self):
+        """
+        Test search results where there are both skills where the whole search
+        term can be found in one field and skills where the search term is 
+        matched across fields is ordered appropriately, with whole matches before
+        part matches 
+        """
+        self.assertTrue(False)
+        
+
+class ReferenceViewTests(TestCase):
+    
+    def test_valid_ref_displayed(self):
+        ref = generic_referee()
+        ref2 = generic_referee(name="Joe Swanson")
+        response = self.client.get(reverse('badicv:referee list'))
+        self.assertQuerysetEqual(
+            response.context['refs'], 
+            ['<Referee: %s>' % ref.name, '<Referee: %s>' % ref2.name],
+            ordered=False)
+    
+    def test_invalid_ref(self):
+        models.Referee.objects.create(name="no", description="dice")
+        response = self.client.get(reverse('badicv:referee list'))
+        self.assertQuerysetEqual(response.context['refs'], [])
+        
+    def test_valid_ref_2(self):
+        ref = models.Referee.objects.create(name="no", description="dice")
+        models.Phone.objects.create(phone_number="+6449999999", referee=ref)
+        response = self.client.get(reverse('badicv:referee list'))
+        self.assertQuerysetEqual(
+            response.context['refs'], ['<Referee: %s>' % ref.name])
+        
+    def test_valid_ref_3(self):
+        ref = models.Referee.objects.create(name="no", description="dice")
+        models.Email.objects.create(email="jamie.sam@jamiesam.com", referee=ref)
+        response = self.client.get(reverse('badicv:referee list'))
+        self.assertQuerysetEqual(
+            response.context['refs'], ['<Referee: %s>' % ref.name])
+    
         
         
         

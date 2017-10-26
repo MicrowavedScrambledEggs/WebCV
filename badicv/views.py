@@ -28,18 +28,20 @@ def skill_description(request, skill_name):
 
 def skill_search(request):
     form = forms.SkillSearchForm(request.GET)
-    skills = models.Skill.objects.all() #if nothing searched, show all
-    if 'search_term' in request.GET and request.GET['search_term'] != "":
-        #skills = apply_skill_search_term(request.GET['search_term'], skills)
-        pass
+    skills = models.Skill.objects.exclude(experiencewithskill=None)
+    skills = skills.exclude(types=None)
     if 'type' in request.GET and request.GET['type'] != '':
         skills = skills.filter(types__type=request.GET['type'])
+    if 'search_term' in request.GET and request.GET['search_term'] != "":
+        skills = apply_skill_search_term(request.GET['search_term'], skills)
     return render(request, 'badicv/skill_search.html', 
                   context={"skills": skills, 'form': form})
 
 def referee_list(request):
+    refs = models.Referee.objects.exclude(phone=None)
+    refs = refs.union(models.Referee.objects.exclude(email=None))
     return render(request, 'badicv/referee_list.html', 
-                  context={"refs": models.Referee.objects.all()})
+                  context={"refs": refs})
 
 def referee_description(request, referee_name):
     ref = models.Referee.objects.get(name=referee_name)
@@ -68,15 +70,51 @@ def apply_experience_search_term(search_term, query_set):
         query_set = qName.union(qDesc, qLoc, qSkill, qExSDesc)
         
     def compare_results(r1, r2):
+        """
+        name > location > skills > description > experience with skill description
+        """
+        # convert to python regex
+        pterms = [term.replace(r'\y', r'\b') for term in terms] 
+        comp = compare_results_feild(r1, r2, pterms, "name")
+        if comp != 0:
+            return comp
+        comp = compare_results_feild(r1, r2, pterms, "location")
+        if comp != 0:
+            return comp
         r1_count = 0
         r2_count = 0
         for term in terms:
-            term = term.replace(r'\y', r'\b') # convert to python regex
-            if re.search(term, r1.name, flags=re.I) != None:
+            if r1.experiencewithskill_set.filter(skill__name__iregex=term).exists():
                 r1_count = r1_count + 1
-            if re.search(term, r2.name, flags=re.I) != None:
+            if r2.experiencewithskill_set.filter(skill__name__iregex=term).exists():
                 r2_count = r2_count + 1
-        return r2_count - r1_count
+        if r2_count - r1_count != 0:
+            return r2_count - r1_count
+        return compare_results_feild(r1, r2, pterms, "description")
     
     return sorted(query_set, key=cmp_to_key(compare_results))
+
+def compare_results_feild(result1, result2, terms, field):
+    r1_count = 0
+    r2_count = 0
+    for term in terms:
+        if re.search(term, getattr(result1, field), flags=re.I) != None:
+            r1_count = r1_count + 1
+        if re.search(term, getattr(result2, field), flags=re.I) != None:
+            r2_count = r2_count + 1
+    return r2_count - r1_count
+
+def apply_skill_search_term(search_term, query_set):
+    terms = re.split(r'\s', search_term) # split into list of words
+    # flank words in search term by postgres word boundary regex  
+    terms = [r'\y%s\y' % term for term in terms]
+    for term in terms:
+        qName = query_set.filter(name__iregex=term)
+        qDesc = query_set.filter(description__iregex=term)
+        qSkill = query_set.filter(experiencewithskill__experience__name__iregex=term).distinct()
+        qExSDesc = query_set.filter(experiencewithskill__description__iregex=term).distinct()
+        query_set = qName.union(qDesc, qSkill, qExSDesc)
+    
+    return query_set
+    
         
