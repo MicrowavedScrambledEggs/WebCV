@@ -13,11 +13,11 @@ def experience_description(request, experi_name):
 
 def experience_search(request):
     form = forms.ExperienceSearchForm(request.GET)
-    exes = models.Experience.objects.all() # if nothing searched, show all
-    if 'search_term' in request.GET and request.GET['search_term'] != "":
-        exes = apply_search_term(request.GET['search_term'], exes)
+    exes = models.Experience.objects.exclude(experiencewithskill=None)
     if 'type' in request.GET and request.GET['type'] != '':
         exes = exes.filter(type=request.GET['type'])
+    if 'search_term' in request.GET and request.GET['search_term'] != "":
+        exes = apply_experience_search_term(request.GET['search_term'], exes)
     return render(request, 'badicv/experience_search.html', 
                   context={"exes": exes, "form" : form})
 
@@ -30,7 +30,8 @@ def skill_search(request):
     form = forms.SkillSearchForm(request.GET)
     skills = models.Skill.objects.all() #if nothing searched, show all
     if 'search_term' in request.GET and request.GET['search_term'] != "":
-        skills = apply_search_term(request.GET['search_term'], skills)
+        #skills = apply_skill_search_term(request.GET['search_term'], skills)
+        pass
     if 'type' in request.GET and request.GET['type'] != '':
         skills = skills.filter(types__type=request.GET['type'])
     return render(request, 'badicv/skill_search.html', 
@@ -48,9 +49,9 @@ def referee_description(request, referee_name):
 def index(request):
     return render(request, 'badicv/index.html')
 
-def apply_search_term(search_term, query_set):
+def apply_experience_search_term(search_term, query_set):
     """
-    Method used to search a query set of a model with a name and description field
+    Method used to search a query set of experiences
     looking for whole word matches of words in the search term string. It then 
     orders the results of the search by how many of the words in search term are
     in the name
@@ -60,8 +61,11 @@ def apply_search_term(search_term, query_set):
     terms = [r'\y%s\y' % term for term in terms]
     for term in terms:
         qName = query_set.filter(name__iregex=term)
+        qLoc = query_set.filter(location__iregex=term)
+        qSkill = query_set.filter(experiencewithskill__skill__name__iregex=term).distinct()
         qDesc = query_set.filter(description__iregex=term)
-        query_set = qName.union(qDesc)
+        qExSDesc = query_set.filter(experiencewithskill__description__iregex=term).distinct()
+        query_set = qName.union(qDesc, qLoc, qSkill, qExSDesc)
         
     def compare_results(r1, r2):
         r1_count = 0

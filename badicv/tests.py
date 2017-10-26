@@ -10,11 +10,11 @@ ex_name_2 = "Dish Washing"
 
 
 def generic_experience(
-        name = ex_name_1, type = "Wrk", location = "New World",
-        description= "Got some experience with cleaning", 
+        name = ex_name_1, extype = "Wrk", location = "New World",
+        description= "Responsible for keeping the supermarket tidy", 
         start_date = "2010-03-03", end_date = "2011-04-04"):
     return models.Experience.objects.create(
-        name=name, type=type, location=location, description=description, 
+        name=name, type=extype, location=location, description=description, 
         start_date = start_date, end_date = end_date)
     
 def generic_referee(
@@ -26,21 +26,41 @@ def generic_referee(
 def generic_skill(
         name="cleaning", stype="hygiene", 
         description="I can clean with good attention to detail"):
-    techType = models.SkillType.objects.create(type=stype)
+    skillType, result = models.SkillType.objects.get_or_create(type=stype)
     skill = models.Skill.objects.create(name=name, description=description)
-    skill.types =[techType]
+    skill.types =[skillType]
     return skill
+
+def generic_experience_and_skill(
+        name = ex_name_1, extype = "Wrk", location = "New World",
+        description= "Responsible for keeping the supermarket tidy", 
+        start_date = "2010-03-03", end_date = "2011-04-04",
+        sname="cleaning", stype="hygiene", 
+        sdescription="I can clean with good attention to detail", 
+        exsdescription="scrubbing them floors"
+        ):
+    ex = models.Experience.objects.create(
+        name=name, type=extype, location=location, description=description, 
+        start_date = start_date, end_date = end_date)
+    if models.Skill.objects.filter(name=sname).exists():
+        skill = models.Skill.objects.get(name=sname)
+    else:
+        skill = generic_skill(name=sname, stype=stype, description=sdescription)
+    models.ExperienceWithSkill.objects.create(
+        experience=ex, skill=skill, description=exsdescription)
+    return ex, skill
 
 def set_up_experience_search():
     ex = generic_experience()
-    ex2 = generic_experience(name=ex_name_2, location="joe's garage", type="Hob")
+    ex2 = generic_experience(name=ex_name_2, location="joe's garage", extype="Hob")
     skill = generic_skill()
     models.ExperienceWithSkill.objects.create(
-        experience_name=ex, skill_name=skill, 
+        experience=ex, skill=skill, 
         description = "scrubbing them floors")
     models.ExperienceWithSkill.objects.create(
-        experience_name=ex2, skill_name=skill, 
+        experience=ex2, skill=skill, 
         description = "cleaning them dishes")
+    return ex, ex2, skill
 
 # Create your tests here.
 class ExperienceModelTests(TestCase):
@@ -68,7 +88,7 @@ class ExperienceSearchViewTests(TestCase):
         ex = generic_experience()
         skill = generic_skill()
         models.ExperienceWithSkill.objects.create(
-            experience_name=ex, skill_name=skill, 
+            experience=ex, skill=skill, 
             description = "scrubbing them floors")
         response = self.client.get(reverse('badicv:experience search'))
         self.assertQuerysetEqual(
@@ -122,12 +142,11 @@ class ExperienceSearchViewTests(TestCase):
         Checks view filters experiences by type and search term, finding the 
         search term in the name
         """
-        set_up_experience_search()
+        ex1, ex2, skill = set_up_experience_search()
         # create another experience of type hobby that should get filtered
-        ex = generic_experience(type="Hob")
-        skill = generic_skill()
+        ex3 = generic_experience(extype="Hob")
         models.ExperienceWithSkill.objects.create(
-            experience_name=ex, skill_name=skill, 
+            experience=ex3, skill=skill, 
             description = "scrubbing them floors")
         response = self.client.get(
             reverse('badicv:experience search'), 
@@ -155,6 +174,64 @@ class ExperienceSearchViewTests(TestCase):
         response = self.client.get(
             reverse('badicv:experience search'), {"search_term": "New"})
         self.assertQuerysetEqual(
-            response.context['exes'], ['<Experience: %s>' % ex_name_1]) 
+            response.context['exes'], ['<Experience: %s>' % ex_name_1])
+        
+    def test_valid_search_searchterm_skill(self):
+        """
+        Checks view filters experiences by search term and finds search term in
+        list of skills
+        """
+        ex1, ex2, skill = set_up_experience_search()
+        skill2 = generic_skill(name="customer service")
+        models.ExperienceWithSkill.objects.create(
+            experience=ex1, skill=skill2, 
+            description = "Helping clients with cleaning products")
+        response = self.client.get(
+            reverse('badicv:experience search'), {"search_term": "customer"})
+        self.assertQuerysetEqual(
+            response.context['exes'], ['<Experience: %s>' % ex_name_1])
+        
+    def test_valid_search_searchterm_exwithskilldescription(self):
+        """
+        Checks view filters experiences by search term and finds search term in
+        the description of experience with skill
+        """
+        ex1, ex2, skill = set_up_experience_search()
+        skill2 = generic_skill(name="customer service")
+        models.ExperienceWithSkill.objects.create(
+            experience=ex1, skill=skill2, 
+            description = "Helping clients with cleaning products")
+        response = self.client.get(
+            reverse('badicv:experience search'), {"search_term": "clients"})
+        self.assertQuerysetEqual(
+            response.context['exes'], ['<Experience: %s>' % ex_name_1])
+        
+    def test_search_ordering_whole_phrase(self):
+        """
+        Tests that the ordering of search results by which field has a complete  
+        match of the search term is correct 
+        name > location > skills > description > experience with skill description 
+        """
+        search_term = "Black Bugs Blood"
+        item_no = 1
+        keywords = ["location", "sname", "description", "exsdescription"]
+        expected_ordering = [generic_experience_and_skill(name=search_term)[0]]
+        for keyword in keywords:
+            expected_ordering.append(generic_experience_and_skill(
+                **{"name": "Test ex %d" % item_no, keyword: search_term})[0])
+            item_no = item_no + 1
+        response = self.client.get(
+            reverse('badicv:experience search'), {"search_term": search_term})
+        self.assertListEqual(response.context['exes'], expected_ordering)
+        
+    def test_search_ordering_whole_phrase_before_part_match(self):
+        self.assertTrue(False)
+        
+    def test_search_ordering_part_match(self):
+        self.assertTrue(False)
+        
+    
+        
+     
         
         

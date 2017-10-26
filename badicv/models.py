@@ -33,15 +33,15 @@ class Experience(models.Model):
     
 
 class ExperienceWithSkill(models.Model):
-    experience_name = models.ForeignKey(Experience, on_delete=models.CASCADE)
-    skill_name = models.ForeignKey(Skill, on_delete=models.CASCADE)
+    experience = models.ForeignKey(Experience, on_delete=models.CASCADE)
+    skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
     description = models.TextField()
     
     class Meta:
-        unique_together = ('experience_name', 'skill_name')
+        unique_together = ('experience', 'skill')
         
     def __str__(self):
-        return self.skill_name.name + " experience at " + self.experience_name.name
+        return self.skill.name + " experience at " + self.experience.name
         
 
 class Referee(models.Model):
