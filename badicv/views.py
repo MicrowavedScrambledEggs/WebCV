@@ -51,12 +51,20 @@ def referee_description(request, referee_name):
 def index(request):
     return render(request, 'badicv/index.html')
 
+
+# Helper Methods
+
+
 def apply_experience_search_term(search_term, query_set):
     """
-    Method used to search a query set of experiences
-    looking for whole word matches of words in the search term string. It then 
-    orders the results of the search by how many of the words in search term are
-    in the name
+    Method used to search a query set of experiences looking for whole word 
+    matches of words in the search term string. Results must have each word in 
+    the search term present in at least one of these fields:
+        name, location, skills, description, experience with skill description 
+    It then orders the results of the search by relevance, comparing results by
+    going through the fields in the order above and saying one result is more
+    relevant than the other when more words from the search term are in that 
+    field
     """
     terms = re.split(r'\s', search_term) # split into list of words
     # flank words in search term by postgres word boundary regex  
@@ -73,6 +81,29 @@ def apply_experience_search_term(search_term, query_set):
         """
         name > location > skills > description > experience with skill description
         """
+        #Whole term match search
+        pwholeterm = r'\b%s\b' % search_term #regex for use within python
+        wholeterm = r'\y%s\y' % search_term #regex for use within postgres
+        r1_count = 0
+        r2_count = 0
+        scores = {'name':5, 'location':4, 'description': 2}
+        for key in scores.keys():
+            if r1_count == 0 and re.search(pwholeterm, getattr(r1, key), flags=re.I) != None:
+                r1_count = scores[key]
+            if r2_count == 0 and re.search(pwholeterm, getattr(r2, key), flags=re.I) != None:
+                r2_count = scores[key]
+        if r1_count < 3 and r1.experiencewithskill_set.filter(skill__name__iregex=wholeterm).exists():
+            r1_count = 3
+        if r2_count < 3 and r2.experiencewithskill_set.filter(skill__name__iregex=wholeterm).exists():
+            r2_count = 3
+        if r1_count == 0 and r1.experiencewithskill_set.filter(description__iregex=wholeterm).exists():
+            r1_count = 1
+        if r2_count == 0 and r2.experiencewithskill_set.filter(description__iregex=wholeterm).exists():
+            r2_count = 1
+        if r2_count - r1_count != 0:
+            return r2_count - r1_count
+        
+        # Partial term match search
         # convert to python regex
         pterms = [term.replace(r'\y', r'\b') for term in terms] 
         comp = compare_results_feild(r1, r2, pterms, "name")
@@ -105,6 +136,16 @@ def compare_results_feild(result1, result2, terms, field):
     return r2_count - r1_count
 
 def apply_skill_search_term(search_term, query_set):
+    """
+    Method used to search a query set of skills looking for whole word 
+    matches of words in the search term string. Results must have each word in 
+    the search term present in at least one of these fields:
+        name, description, skills, experience with skill description 
+    It then orders the results of the search by relevance, comparing results by
+    going through the fields in the order above and saying one result is more
+    relevant than the other when more words from the search term are in that 
+    field
+    """
     terms = re.split(r'\s', search_term) # split into list of words
     # flank words in search term by postgres word boundary regex  
     terms = [r'\y%s\y' % term for term in terms]
@@ -115,6 +156,63 @@ def apply_skill_search_term(search_term, query_set):
         qExSDesc = query_set.filter(experiencewithskill__description__iregex=term).distinct()
         query_set = qName.union(qDesc, qSkill, qExSDesc)
     
-    return query_set
+    def compare_results(r1, r2):
+        """
+        name > description > experience > experience with skill description
+        """
+        #Whole term match search
+        pwholeterm = r'\b%s\b' % search_term #regex for use within python
+        wholeterm = r'\y%s\y' % search_term #regex for use within postgres
+        r1_count = 0
+        r2_count = 0
+        scores = {'name':4, 'description': 3}
+        for key in scores.keys():
+            if r1_count == 0 and re.search(pwholeterm, getattr(r1, key), flags=re.I) != None:
+                r1_count = scores[key]
+            if r2_count == 0 and re.search(pwholeterm, getattr(r2, key), flags=re.I) != None:
+                r2_count = scores[key]
+        
+        if r1_count < 3:
+            exMatch1 = r1.experiencewithskill_set.filter(
+                experience__name__iregex=wholeterm).exists()
+            if exMatch1:
+                r1_count = 2
+        if r2_count < 3:
+            exMatch2 = r2.experiencewithskill_set.filter(
+                experience__name__iregex=wholeterm).exists()
+            if exMatch2:
+                r2_count = 2
+        if r1_count == 0: 
+            exMatch1 = r1.experiencewithskill_set.filter(
+                description__iregex=wholeterm).exists()
+            if exMatch1:
+                r1_count = 1
+        if r2_count == 0: 
+            exMatch2 = r2.experiencewithskill_set.filter(
+                description__iregex=wholeterm).exists()
+            if exMatch2:
+                r2_count = 1
+        if r2_count - r1_count != 0:
+            return r2_count - r1_count
+        
+        # Partial term match search
+        # convert to python regex
+        pterms = [term.replace(r'\y', r'\b') for term in terms] 
+        comp = compare_results_feild(r1, r2, pterms, "name")
+        if comp != 0:
+            return comp
+        comp = compare_results_feild(r1, r2, pterms, "description")
+        if comp != 0:
+            return comp
+        r1_count = 0
+        r2_count = 0
+        for term in terms:
+            if r1.experiencewithskill_set.filter(experience__name__iregex=term).exists():
+                r1_count = r1_count + 1
+            if r2.experiencewithskill_set.filter(experience__name__iregex=term).exists():
+                r2_count = r2_count + 1
+        return r2_count - r1_count
+    
+    return sorted(query_set, key=cmp_to_key(compare_results))
     
         

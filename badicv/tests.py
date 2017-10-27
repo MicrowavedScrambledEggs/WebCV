@@ -64,6 +64,51 @@ def set_up_experience_search():
         description = "cleaning them dishes")
     return ex, ex2, skill
 
+def enumerate_search_term_experience():
+    terms = ["blue", "bled", 'blood', "bugs", "black"]
+    values = [["she", "sells", "sea", "shells", "shore"] for i in range(5)]
+    experiences = []
+    
+    def recursive_helper(i, j):
+        values[j][i] = terms[i]
+        if i == len(terms) - 1:
+            name = "%s %d" % (' '.join(values[0]), len(experiences) +1)
+            experiences.append(generic_experience_and_skill(
+                name = name, location=' '.join(values[1]), 
+                sname=' '.join(values[2]), description=' '.join(values[3]), 
+                exsdescription=' '.join(values[4]))[0])
+        else:
+            recursive_helper(i + 1, j)
+        values[j][i] = "shell"
+        if j < len(values) - 1:
+            recursive_helper(i, j + 1)
+    
+    recursive_helper(0, 0)
+    return experiences
+
+def enumerate_search_term_skill():
+    terms = ["bled", 'blood', "bugs", "black"]
+    values = [["she", "sells", "sea", "shells"] for i in range(4)]
+    skills = []
+    
+    def recursive_helper(i, j):
+        values[j][i] = terms[i]
+        if i == len(terms) - 1:
+            name = "%s %d" % (' '.join(values[0]), len(skills) +1)
+            skills.append(generic_experience_and_skill(
+                sname = name, name=' '.join(values[2]), 
+                sdescription=' '.join(values[1]), 
+                exsdescription=' '.join(values[3]))[1])
+        else:
+            recursive_helper(i + 1, j)
+        values[j][i] = "shell"
+        if j < len(values) - 1:
+            recursive_helper(i, j + 1)
+    
+    recursive_helper(0, 0)
+    return skills
+            
+
 # Create your tests here.
 class ExperienceModelTests(TestCase):
     
@@ -228,13 +273,41 @@ class ExperienceSearchViewTests(TestCase):
         self.assertListEqual(response.context['exes'], expected_ordering)
         
     def test_search_ordering_whole_phrase_before_part_match(self):
-        self.assertTrue(False)
+        """
+        Tests that the ordering of search results by which field has a complete  
+        match of the search term and which field has partial matches of the search
+        term is correct 
+        name > location > skills > description > experience with skill description 
+        """
+        item_no = 1
+        search_term = "Black bugs blood bled blue"
+        keywords = ["location", "sname", "description", "exsdescription"]
+        expected_ordering = [generic_experience_and_skill(name=search_term)[0]]
+        for keyword in keywords:
+            expected_ordering.append(generic_experience_and_skill(
+                **{"name": "Test ex %d" % item_no, keyword: search_term})[0])
+            item_no = item_no + 1    
+        expected_ordering.extend(enumerate_search_term_experience())
+        response = self.client.get(
+            reverse('badicv:experience search'), {"search_term": search_term})
+        self.assertListEqual(response.context['exes'], expected_ordering)
         
     def test_search_ordering_part_match(self):
-        self.assertTrue(False)
+        """
+        Tests that the ordering of search results by which fields have partial  
+        matches of the search term is correct 
+        name > location > skills > description > experience with skill description 
+        """
+        experiences = enumerate_search_term_experience()
+        search_term = "Black bugs blood bled blue"
+        response = self.client.get(
+            reverse('badicv:experience search'), {"search_term": search_term})
+        self.assertListEqual(response.context['exes'], experiences)
         
 
 class SkillSearchViewTests(TestCase):
+    
+    maxDiff = None
     
     def test_invalid_skills_no_experience(self):
         """
@@ -354,7 +427,17 @@ class SkillSearchViewTests(TestCase):
         is ordered appropriately by which field matched
         name > description > experience > experience with skill description
         """
-        self.assertTrue(False)
+        item_no = 1
+        search_term = "Black bugs blood bled"
+        keywords = ["sdescription", "name", "exsdescription"]
+        expected_ordering = [generic_experience_and_skill(sname=search_term)[1]]
+        for keyword in keywords:
+            expected_ordering.append(generic_experience_and_skill(
+                **{"sname": "Test skill %d" % item_no, keyword: search_term})[1])
+            item_no = item_no + 1 
+        response = self.client.get(
+            reverse('badicv:skill search'), {"search_term": search_term})
+        self.assertListEqual(response.context['skills'], expected_ordering)
         
     def test_searchterm_ordering_part_term(self):
         """
@@ -363,7 +446,11 @@ class SkillSearchViewTests(TestCase):
         the word) is ordered appropriately by which field matched the most words
         name > description > experience > experience with skill description
         """
-        self.assertTrue(False)
+        skills = enumerate_search_term_skill()
+        search_term = "Black bugs blood bled"
+        response = self.client.get(
+            reverse('badicv:skill search'), {"search_term": search_term})
+        self.assertListEqual(response.context['skills'], skills)
         
     def test_searchterm_ordering_whole_part_term(self):
         """
@@ -372,7 +459,18 @@ class SkillSearchViewTests(TestCase):
         matched across fields is ordered appropriately, with whole matches before
         part matches 
         """
-        self.assertTrue(False)
+        item_no = 1
+        search_term = "Black bugs blood bled"
+        keywords = ["sdescription", "name", "exsdescription"]
+        expected_ordering = [generic_experience_and_skill(sname=search_term)[1]]
+        for keyword in keywords:
+            expected_ordering.append(generic_experience_and_skill(
+                **{"sname": "Test skill %d" % item_no, keyword: search_term})[1])
+            item_no = item_no + 1
+        expected_ordering.extend(enumerate_search_term_skill()) 
+        response = self.client.get(
+            reverse('badicv:skill search'), {"search_term": search_term})
+        self.assertListEqual(response.context['skills'], expected_ordering)
         
 
 class ReferenceViewTests(TestCase):
