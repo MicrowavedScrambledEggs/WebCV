@@ -15,7 +15,7 @@ def experience_search(request):
     form = forms.ExperienceSearchForm(request.GET)
     exes = models.Experience.objects.exclude(experiencewithskill=None)
     if 'type' in request.GET and request.GET['type'] != '':
-        exes = exes.filter(type=request.GET['type'])
+        exes = exes.filter(ex_type=request.GET['type'])
     if 'search_term' in request.GET and request.GET['search_term'] != "":
         exes = apply_experience_search_term(request.GET['search_term'], exes)
     return render(request, 'badicv/experience_search.html', 
@@ -31,7 +31,7 @@ def skill_search(request):
     skills = models.Skill.objects.exclude(experiencewithskill=None)
     skills = skills.exclude(types=None)
     if 'type' in request.GET and request.GET['type'] != '':
-        skills = skills.filter(types__type=request.GET['type'])
+        skills = skills.filter(types__skill_type=request.GET['type'])
     if 'search_term' in request.GET and request.GET['search_term'] != "":
         skills = apply_skill_search_term(request.GET['search_term'], skills)
     return render(request, 'badicv/skill_search.html', 

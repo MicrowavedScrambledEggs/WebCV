@@ -14,7 +14,7 @@ def generic_experience(
         description= "Responsible for keeping the supermarket tidy", 
         start_date = "2010-03-03", end_date = "2011-04-04"):
     return models.Experience.objects.create(
-        name=name, type=extype, location=location, description=description, 
+        name=name, ex_type=extype, location=location, description=description, 
         start_date = start_date, end_date = end_date)
     
 def generic_referee(
@@ -28,7 +28,7 @@ def generic_referee(
 def generic_skill(
         name="cleaning", stype="hygiene", 
         description="I can clean with good attention to detail"):
-    skillType, result = models.SkillType.objects.get_or_create(type=stype)
+    skillType, result = models.SkillType.objects.get_or_create(skill_type=stype)
     skill = models.Skill.objects.create(name=name, description=description)
     skill.types =[skillType]
     return skill
@@ -42,7 +42,7 @@ def generic_experience_and_skill(
         exsdescription="scrubbing them floors"
         ):
     ex = models.Experience.objects.create(
-        name=name, type=extype, location=location, description=description, 
+        name=name, ex_type=extype, location=location, description=description, 
         start_date = start_date, end_date = end_date)
     if models.Skill.objects.filter(name=sname).exists():
         skill = models.Skill.objects.get(name=sname)
@@ -114,14 +114,14 @@ class ExperienceModelTests(TestCase):
     
     def test_end_date_not_before_start_date(self):
         with self.assertRaises(ValidationError):
-            generic_experience(end_date="2010-03-03", start_date="2011-04-04")
+            generic_experience(end_date="2010-03-03", start_date="2011-04-04").clean()
 
             
     def test_start_date_not_in_future(self):
-        start_date = timezone.now() + datetime.timedelta(days=30)
-        end_date = timezone.now() + datetime.timedelta(days=90)
+        start_date = timezone.now().date() + datetime.timedelta(days=30)
+        end_date = timezone.now().date() + datetime.timedelta(days=90)
         with self.assertRaises(ValidationError):
-            generic_experience(start_date=start_date, end_date=end_date)
+            generic_experience(start_date=start_date, end_date=end_date).clean()
         
 
 

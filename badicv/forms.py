@@ -20,5 +20,5 @@ class SkillSearchForm(forms.Form):
     search_term = forms.CharField(label='search term', max_length=128,
                                   required=False)
     choices = [('','')]
-    choices.extend([(sk.type, sk.type) for sk in models.SkillType.objects.all()])
+    choices.extend([(sk.skill_type, sk.skill_type) for sk in models.SkillType.objects.all()])
     type = forms.ChoiceField(choices=tuple(choices), required=False)

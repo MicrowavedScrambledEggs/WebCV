@@ -1,9 +1,12 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+from datetime import datetime
 
 # Create your models here.
 class SkillType(models.Model):
-    type = models.CharField(max_length=32, primary_key=True)
+    skill_type = models.CharField(max_length=32, primary_key=True)
     
     def __str__(self):
         return self.type 
@@ -18,15 +21,26 @@ class Skill(models.Model):
         return self.name
     
 
-class Experience(models.Model):
+class Experience(models.Model):        
+    
     type_choice = (("Wrk", "Work"), ("Ed", "Education"), ("Hob", "Hobby"), ("Vol", "Volunteer"))
     name = models.CharField(max_length=64)
     location = models.CharField(max_length=64)
     start_date = models.DateField("Start Date", blank=True)
     end_date = models.DateField("End Date", blank=True)
     description = models.TextField()
-    type = models.CharField(max_length=4, choices=type_choice)
+    ex_type = models.CharField(max_length=4, choices=type_choice)
     skills = models.ManyToManyField(Skill, through='ExperienceWithSkill')
+    
+    def clean(self):
+        if type(self.start_date) is str:
+            self.start_date = datetime.strptime(self.start_date, "%Y-%m-%d").date()
+        if type(self.end_date) is str:
+            self.end_date = datetime.strptime(self.end_date, "%Y-%m-%d").date()
+        if self.start_date > timezone.now().date():
+            raise ValidationError("Start date can not be in future")
+        if self.start_date > self.end_date:
+            raise ValidationError("Start date can not be after end date")        
     
     def __str__(self):
         return self.name
