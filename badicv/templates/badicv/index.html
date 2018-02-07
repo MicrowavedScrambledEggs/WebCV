@@ -1,26 +1,57 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
 <head>
 <title>Badi James CV</title>
+<link rel="stylesheet" type="text/css" href="{% static 'badicv/index.css' %}" /> 
 </head>
 <body>
 
-<h1>Badi James CV</h1>
+<div class=titleBar>
+	<div class=title_object>Badi James CV</div>
+	<ul class=title_object>
+		<li class=title_object><a href="/skill/">Skills</a></li>
+		<li class=title_object><a href="/experience/">Experiences</a></li>
+		<li class=title_object><a href="/referee/">Referees</a></li>
+	</ul>
+	<div class=title_object>
+		<ul class=title_object>
+			<li>Home: 04 970 1894</li>
+			<li>Cell: 022 046 2234</li>
+			<li>badi.t.james@gmail.com</li>
+		</ul>
+	</div>
+</div>
 
-<p>I am a recent graduate interested and experienced with science and software 
-development, looking for inspiring projects to test and develop my technical and 
-teamwork skills. Aiming for positive relationships with people has helped me have 
-positive life experiences. In my free time I can be found enjoying music, the outdoors 
-and interesting conversation.</p>
-<p>
-<a href="/skill/">My Skills</a><br>
-<a href="/experience/">My Experience (work, educational, etc)</a><br>
-<a href="/referee/">My Referees</a><br>
-</p>
-<p>Home: 04 970 1894 <br>
-  Cell: 022 046 2234 <br>
-  badi.t.james@gmail.com <br>
-</p>
+<div class=content>
+	<div class=description>
+		<p>I am a recent graduate interested and experienced with science and software 
+		development, looking for inspiring projects to test and develop my technical and 
+		teamwork skills. Aiming for positive relationships with people has helped me have 
+		positive life experiences. In my free time I can be found enjoying music, the outdoors 
+		and interesting conversation.</p>
+	</div>
+	<div class=welcome_menu>
+		<ul>
+			<li><a href="/skill/">My Skills</a></li>
+			<li><a href="/experience/">My Experience (work, educational, etc)</a></li>
+			<li><a href="/referee/">My Referees</a></li>
+		</ul>
+	</div>
+	<div class=contact>
+		<h2>Contact:</h2>
+		<ul>
+			<li>Home: 04 970 1894</li>
+			<li>Cell: 022 046 2234</li>
+			<li>badi.t.james@gmail.com</li>
+		</ul>
+	</div>
+</div>
 
+<div class=bottom_bar>
+	Take a look at my code for this website and other projects at 
+	<a href="https://github.com/MicrowavedScrambledEggs">my github</a>
+</div>	
 </body>
 </html>

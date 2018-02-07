@@ -37,6 +37,10 @@ class Experience(models.Model):
             self.start_date = datetime.strptime(self.start_date, "%Y-%m-%d").date()
         if type(self.end_date) is str:
             self.end_date = datetime.strptime(self.end_date, "%Y-%m-%d").date()
+        if type(self.start_date) is datetime:
+            self.start_date = self.start_date.date()
+        if type(self.end_date) is datetime:
+            self.end_date = self.end_date.date()
         if self.start_date > timezone.now().date():
             raise ValidationError("Start date can not be in future")
         if self.start_date > self.end_date:
@@ -72,11 +76,17 @@ class Phone(models.Model):
     phone_regex = RegexValidator(regex=r'^\+?\d{0,2} ?\d? ?\d{3} ?\d{4}$', 
         message="Phone number must be entered in the format: '+999999999' or '+99 9 999 9999'")
     phone_number = models.CharField(validators=[phone_regex], max_length=15, blank=True)
+    
+    def __str__(self):
+        return self.referee.name + ": " + self.phone_number
 
 
 class Email(models.Model):
     referee = models.ForeignKey(Referee, on_delete=models.CASCADE)
     email = models.EmailField()
+    
+    def __str__(self):
+        return self.referee.name + ": " + self.email
     
 
     

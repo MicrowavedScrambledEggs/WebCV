@@ -1,0 +1,30 @@
+.titleBar, .content, .bottom_bar {
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+.titleBar, .bottom_bar {
+	background-color: rgba(124, 0, 167, 0.75);
+	color: white;
+	font-size: 20px;
+}
+
+a.titleBar {
+	color: white;
+}
+
+.title {
+	font-size: 32px;
+}
+
+.description , .bottom_bar{
+	text-align: center;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.title_object {
+	float: left;
+}

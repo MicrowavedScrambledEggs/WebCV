@@ -118,8 +118,8 @@ class ExperienceModelTests(TestCase):
 
             
     def test_start_date_not_in_future(self):
-        start_date = timezone.now().date() + datetime.timedelta(days=30)
-        end_date = timezone.now().date() + datetime.timedelta(days=90)
+        start_date = timezone.now() + datetime.timedelta(days=30)
+        end_date = timezone.now() + datetime.timedelta(days=90)
         with self.assertRaises(ValidationError):
             generic_experience(start_date=start_date, end_date=end_date).clean()
         

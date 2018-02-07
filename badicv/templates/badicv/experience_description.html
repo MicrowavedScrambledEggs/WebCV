@@ -19,7 +19,7 @@
 <ul>
 {% for skill in ex.experiencewithskill_set.all %}
 	<li>
-	<h3><a href="/skill/{{skill.skill_name}}/">{{skill.skill_name}}</a></h3>
+	<h3><a href="/skill/{{skill.skill}}/">{{skill.skill}}</a></h3>
 	
 	<p>{{skill.description}}</p>
 	</li>
@@ -32,8 +32,15 @@
 	{% for ref in ex.referee_set.all %}
 		
 		<li><a href="/referee/{{ref.name}}/"><b>{{ref.name}}</b></a><br>
-		{% if ref.phone_number %}{{ref.phone_number}}{% endif %}<br>
-		{% if ref.email %}{{ref.email}}{% endif %}</li>
+			<ul>
+				{% for phone in ref.phone_set.all %}
+					<li>{{phone.phone_number}}</li>
+				{% endfor %}
+				{% for email in ref.email_set.all %}
+					<li>{{email.email}}</li>
+				{% endfor %}
+			</ul>
+		</li>
 		
 	{% endfor %}
 {% endif %}
