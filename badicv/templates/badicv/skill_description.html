@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Badi James CV {{skill.name}}</title>
-</head>
-<body>
+{% extends 'badicv/base.html' %}
+
+{% block name %}{{skill.name}}{% endblock %}
+
+{% block content %}
 
 <h1>{{skill.name}}</h1>
 
@@ -21,5 +20,4 @@
 {% endfor %}
 </ul>
 
-</body>
-</html>
+{% endblock %}

@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Badi James CV Ref: {{ref.name}}</title>
-</head>
-<body>
+{% extends 'badicv/base.html' %}
 
+{% block name %}Ref: {{ref.name}}{% endblock %}
+
+{% block content %}
 
 <h1>{{ref.name}}</h1>
 <p>{{ref.description}}</p>
@@ -24,4 +22,4 @@
 {% endfor %}
 </ul>
 
-</body>
+{% endblock %}

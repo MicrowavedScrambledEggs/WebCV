@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Badi James CV {% block name %}{% endblock %}</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'badicv/index.css' %}" /> 
+		{% block style_sheet %}{% endblock %}
+	</head>
+	<body>
+
+		<div class=titleBar>
+			<div class=title_object>Badi James CV</div>
+			<ul class=title_object>
+				<li class=title_object><a href="/skill/">Skills</a></li>
+				<li class=title_object><a href="/experience/">Experiences</a></li>
+				<li class=title_object><a href="/referee/">Referees</a></li>
+			</ul>
+			<div class=title_object>
+				<ul class=title_object>
+					<li>Home: 04 970 1894</li>
+					<li>Cell: 022 046 2234</li>
+					<li>badi.t.james@gmail.com</li>
+				</ul>
+			</div>
+		</div>	
+		{% block content %}
+		{% endblock %}
+
+		<div class=bottom_bar>
+			Take a look at my code for this website and other projects at 
+			<a href="https://github.com/MicrowavedScrambledEggs">my github</a>
+		</div>	
+	</body>
+</html>

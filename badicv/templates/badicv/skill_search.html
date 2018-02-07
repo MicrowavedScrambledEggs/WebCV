@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Badi James CV Skills</title>
-</head>
-<body>
+{% extends 'badicv/base.html' %}
+
+{% block name %}Skills{% endblock %}
+
+{% block content %}
 
 <form action="{% url 'badicv:skill search' %}" method="get">
 	{{ form }}
@@ -16,5 +15,4 @@
 {% endfor %}
 </ul>
 
-
-</body>
+{% endblock %}

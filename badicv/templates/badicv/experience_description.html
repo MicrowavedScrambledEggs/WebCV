@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Badi James CV {{ex.name}}</title>
-</head>
-<body>
+{% extends 'badicv/base.html' %}
+{% load staticfiles %}
 
+{% block name %}{{ex.name}}{% endblock %}
+{% block style_sheet %}
+	<link rel="stylesheet" type="text/css" href="{% static 'badicv/test.css' %}" /> 
+{% endblock %}
+
+{% block content %}
 <h1>{{ex.name}}</h1>
 
 <h2>{{ex.location}}</h2>
@@ -43,7 +45,7 @@
 		</li>
 		
 	{% endfor %}
+	</ul>
 {% endif %}
 
-</body>
-</html>
+{% endblock %}
