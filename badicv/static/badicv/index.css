@@ -6,10 +6,32 @@
 	background-color: rgba(124, 0, 167, 0.75);
 	color: white;
 	font-size: 20px;
+	width: 100%;
+}
+
+.titleBar {
+	position: static;
+	top: 0;
+	/*height: 80px;*/
+	overflow: auto;
+}
+
+.bar_contact {
+    /*position: absolute;
+    right: 0;
+	top: 0;*/
+	padding: 10px;
+	float: right;
 }
 
 .bottom_bar {
-	position: bottom;
+	bottom: 0;
+	position: absolute;
+	height: 50px;
+}
+
+.bottom_bar a {
+	color: lightblue;
 }
 
 a.titleBar {
@@ -17,11 +39,18 @@ a.titleBar {
 }
 
 .title {
-	font-size: 32px;
+	font-size: 40px;
+	padding: 20px;
 }
 
 .description , .bottom_bar{
 	text-align: center;
+}
+
+.bottom_text {
+	position: absolute;
+	top: 13px;
+	width: 100%;
 }
 
 body {
@@ -29,7 +58,7 @@ body {
 	padding: 0;
 }
 
-ul .title_object{
+ul.title_object{
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -37,7 +66,7 @@ ul .title_object{
     background-color: rgba(124, 0, 167, 0.5);
 }
 
-li.title_object{
+.title_object{
     float: left;
 }
 
