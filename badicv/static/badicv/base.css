@@ -1,8 +1,21 @@
 /* TODO: Decrease reliance on 'magic' numbers, maybe by using javascript */
 			
-body {
+body, html{
 	margin: 0;
 	padding: 0;
+	height: 100%;
+}
+
+.background_div {
+	position: fixed;
+	top: 0px;
+	height: 100%;
+	width: 1000px;
+	margin: auto;
+	background-color:rgba(255, 99, 71, 0.1);
+	left: 50%;
+	transform: translate(-50%, 0%);
+	z-index: -1;
 }
 
 .title_bar, .bottom_bar {
@@ -17,7 +30,7 @@ body {
 .bottom_bar, .title_bar {
 	width: 100%;
 	color: white;
-	background-color: rgba(124, 0, 167, 0.75);
+	background-color: rgb(124, 0, 167);
 }
 
 .title_menu {
@@ -32,7 +45,7 @@ body {
 	margin: auto;
 	padding: 0;
 	overflow: hidden;
-	background-color: rgba(124, 0, 167, 0.5);
+	background-color: rgb(124, 0, 167);
 }
 
 .title_menu a {
@@ -49,7 +62,7 @@ body {
 }
 
 .title_menu a:hover {
-	background-color: rgba(124, 0, 167, 1);
+	background-color: rgb(124, 0, 167);
 }
 
 .title {
@@ -57,11 +70,12 @@ body {
 	text-align: right;
 	position: absolute;
 	left: 50%;
-	top: 38px; /* magic_number_1 / 2 */
 	width: 400px; /* magic_number_3, ideally should automatically be the width 
 					of the title text */
 	/* x translate is 0 - (magic_number_2 / 2) - magic_number_3 - 20 (padding)*/
-	transform: translate(-670px, -50%); 
+	transform: translate(-650px, 0%);
+	height: 76px; /* magic_number_1 */
+	line-height: 76px; /* for vertical text centering */ 
 }
 
 .title a {
@@ -73,17 +87,30 @@ body {
 	position: absolute;
 	left: 50%;
 	transform: translate(250px, 0%); /* x translate is magic_number_2 / 2 */
+	height: 76px; /* magic_number_1 */
+	line-height: 76px; /* for vertical text centering */ 
 }
 
 .bar_contact ul {
+	margin: 0;
 	list-style-type: none;
 	font-size: 1.125em;
 	padding-left: 20px;
+    line-height: 1.5;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.content {
+	max-width: 1000px;
+	margin: auto;
+	font-family: Verdana, Arial, sans-serif;
+	background-color: rgba(0,0,0,0)
 }
 
 .bottom_bar {
-	bottom: 0;
 	position: absolute;
+	bottom: 0;
 	height: 50px;
 	line-height: 50px; /* for vertical text centering */
 	text-align: center;

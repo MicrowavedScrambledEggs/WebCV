@@ -8,7 +8,8 @@
 		{% block style_sheet %}{% endblock %}
 	</head>
 	<body>
-
+		<div class=background_div></div>
+			
 		<div class=title_bar>
 			<div class=title_bar_content>
 				<div class=title><a href="/">Badi James CV</a></div>
@@ -28,8 +29,11 @@
 			</div>
 		</div>	
 		
+		
+		<div class=content>
 		{% block content %}
 		{% endblock %}
+		</div>
 
 		<div class=bottom_bar>
 			<div class=bottom_text>
@@ -37,6 +41,7 @@
 				<a href="https://github.com/MicrowavedScrambledEggs" target="_blank">
 				my github</a>
 			</div>
-		</div>	
+		</div>		
+		
 	</body>
 </html>

@@ -1,28 +1,30 @@
 {% extends 'badicv/base.html' %}
+{% load static %}
+
+{% block style_sheet %}
+<link rel="stylesheet" type="text/css" href="{% static 'badicv/index.css' %}" />  
+{% endblock %}
 
 {% block content %}
-		<div class=content>
-			<div class=description>
-				<p>I am a recent graduate interested and experienced with science and software 
-				development, looking for inspiring projects to test and develop my technical and 
-				teamwork skills. Aiming for positive relationships with people has helped me have 
-				positive life experiences. In my free time I can be found enjoying music, the outdoors 
-				and interesting conversation.</p>
-			</div>
-			<div class=welcome_menu>
-				<ul>
-					<li><a href="/skill/">My Skills</a></li>
-					<li><a href="/experience/">My Experience (work, educational, etc)</a></li>
-					<li><a href="/referee/">My Referees</a></li>
-				</ul>
-			</div>
-			<div class=contact>
-				<h2>Contact:</h2>
-				<ul>
-					<li>Home: 04 970 1894</li>
-					<li>Cell: 022 046 2234</li>
-					<li>badi.t.james@gmail.com</li>
-				</ul>
-			</div>
-		</div>
+		
+	<div class=description>
+		<p>I am a recent graduate interested and experienced with science and software 
+		development, looking for inspiring projects to test and develop my technical and 
+		teamwork skills. Aiming for positive relationships with people has helped me have 
+		positive life experiences. In my free time I can be found enjoying music, the outdoors 
+		and interesting conversation.</p>
+	</div>
+	<div class=welcome_menu>
+		<div id="skill"><a href="/skill/">My Skills</a></div>
+		<div id="exp"><a href="/experience/">My Experience (work, educational, etc)</a></div>
+		<div id="ref"><a href="/referee/">My Referees</a></div>
+	</div>
+	<div class=contact>
+		<h1>Contact:</h1>
+		<ul>
+			<li>Cell: +64 22 0462234</li>
+			<li>Email: badi.t.james@gmail.com</li>
+		</ul>
+	</div>
+		
 {% endblock %}

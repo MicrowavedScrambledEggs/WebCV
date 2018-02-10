@@ -1,0 +1,43 @@
+.description, .contact {
+	text-align: center;
+	padding: 40px;
+}
+
+.contact {
+	max-height: 100%;
+}
+
+.contact ul {
+	list-style-type: none;
+	padding: 0;
+}
+
+.welcome_menu {
+	width: 100%;
+	overflow: auto;
+}
+
+.welcome_menu div {
+	border-style: outset;
+	font-size: 2em;
+}
+
+.welcome_menu  a {
+	display: block;
+	text-decoration: none;
+	padding: 20px;
+	color: black;
+}
+
+#skill {
+	background-color: rgba(124, 0, 167, 0.1);
+}
+
+#exp {
+	background-color: rgba(0, 0, 0, 0.1);
+	text-align: right;
+}
+
+#ref {
+	background-color: rgba(124, 0, 167, 0.1);
+}
