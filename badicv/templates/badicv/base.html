@@ -4,26 +4,30 @@
 <html>
 	<head>
 		<title>Badi James CV {% block name %}{% endblock %}</title>
-		<link rel="stylesheet" type="text/css" href="{% static 'badicv/index.css' %}" /> 
+		<link rel="stylesheet" type="text/css" href="{% static 'badicv/base.css' %}" /> 
 		{% block style_sheet %}{% endblock %}
 	</head>
 	<body>
 
-		<div class=titleBar>
-			<div class=title_object><div class=title>Badi James CV</div></div>
-			<ul class=title_object>
-				<li class=title_object><a href="/skill/">Skills</a></li>
-				<li class=title_object><a href="/experience/">Experiences</a></li>
-				<li class=title_object><a href="/referee/">Referees</a></li>
-			</ul>
-			<div class=bar_contact>
-				<ul class=title_object>
-					<li>Home: 04 970 1894</li>
-					<li>Cell: 022 046 2234</li>
-					<li>badi.t.james@gmail.com</li>
-				</ul>
+		<div class=title_bar>
+			<div class=title_bar_content>
+				<div class=title><a href="/">Badi James CV</a></div>
+				<div class=title_menu>
+					<ul>
+						<li><a href="/skill/">Skills</a></li>
+						<li><a href="/experience/">Experiences</a></li>
+						<li><a href="/referee/">Referees</a></li>
+					</ul>
+				</div>
+				<div class=bar_contact>
+					<ul>
+						<li>+64 4 22 0462234</li>
+						<li>badi.t.james@gmail.com</li>
+					</ul>
+				</div>
 			</div>
 		</div>	
+		
 		{% block content %}
 		{% endblock %}
 

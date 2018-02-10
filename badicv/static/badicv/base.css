@@ -1,0 +1,95 @@
+/* TODO: Decrease reliance on 'magic' numbers, maybe by using javascript */
+			
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.title_bar, .bottom_bar {
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+.title_bar {
+	height: 90px; /* magic_number_1, ideally should automatically be the max 
+					height out of the elements in the title bar*/
+}
+
+.bottom_bar, .title_bar {
+	width: 100%;
+	color: white;
+	background-color: rgba(124, 0, 167, 0.75);
+}
+
+.title_menu {
+	width: 500px; /* magic_number_2 */
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%, 0%);
+}
+
+.title_menu ul{
+	list-style-type: none;
+	margin: auto;
+	padding: 0;
+	overflow: hidden;
+	background-color: rgba(124, 0, 167, 0.5);
+}
+
+.title_menu a {
+	display: block;
+	color: white;
+	font-size: 1.75em;
+	text-align: center;
+	text-decoration: none;
+	width: 33%;
+	float: left;
+	height: 90px; /* magic_number_1 */
+	line-height: 90px; /* for vertical text centering */
+	margin: auto;
+}
+
+.title_menu a:hover {
+	background-color: rgba(124, 0, 167, 1);
+}
+
+.title {
+	font-size: 2.75em;
+	text-align: right;
+	position: absolute;
+	left: 50%;
+	top: 45px; /* magic_number_1 / 2 */
+	width: 400px; /* magic_number_3, ideally should automatically be the width 
+					of the title text */
+	/* x translate is 0 - (magic_number_2 / 2) - magic_number_3 - 20 (padding)*/
+	transform: translate(-670px, -50%); 
+}
+
+.title a {
+	color: white;
+	text-decoration: none;
+}
+
+.bar_contact {
+	position: absolute;
+	left: 50%;
+	transform: translate(250px, 0%); /* x translate is magic_number_2 / 2 */
+}
+
+.bar_contact ul {
+	list-style-type: none;
+	font-size: 1.25em;
+	padding-left: 20px;
+}
+
+.bottom_bar {
+	bottom: 0;
+	position: absolute;
+	height: 50px;
+	line-height: 50px; /* for vertical text centering */
+	text-align: center;
+	font-size: 1.25em;
+}
+
+.bottom_bar a {
+	color: lightblue;
+}
