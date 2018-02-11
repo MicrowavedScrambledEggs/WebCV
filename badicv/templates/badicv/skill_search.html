@@ -4,6 +4,7 @@
 {% block name %}Skills{% endblock %}
 
 {% block style_sheet %} 
+<link rel="stylesheet" type="text/css" href="{% static 'badicv/search.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'badicv/skill_search.css' %}" />
 {% endblock %}  
 
@@ -14,7 +15,7 @@
 	<input type="submit" value="Search">
 </form>
 
-<ul class="skill_list">
+<ul class="search_list">
 {% for skill in skills %}
 	<li><a href="/skill/{{skill.name}}/"><u style="color: black;">{{skill.name}}:</u> <i>
 	{{skill.description}}</i> <div class="read_more"><b>click to read more</b></div></a></li>

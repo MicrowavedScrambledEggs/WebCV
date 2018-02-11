@@ -4,6 +4,7 @@
 {% block name %}Experiences{% endblock %}
 
 {% block style_sheet %} 
+<link rel="stylesheet" type="text/css" href="{% static 'badicv/search.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'badicv/experience_search.css' %}" />
 {% endblock %} 
 
@@ -13,7 +14,7 @@
 	<input type="submit" value="Search">
 </form>
 
-<ul class="experience_list">
+<ul class="search_list">
 {% for ex in exes %}
 	<li><a href="/experience/{{ex.name}}/">
 		<div>
