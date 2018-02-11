@@ -1,0 +1,64 @@
+.content {
+	padding: 0;
+}
+
+.search_bar {
+	margin: 20px;
+}
+
+#id_search_term {
+	width: 60%;
+}
+
+#id_type {
+	width: 20%;
+}
+
+ul.experience_list  {
+	padding: 0;
+	list-style-type: none;
+}
+
+.experience_list a {
+	display: block;
+	overflow: hidden;
+	width: 100%;
+	text-decoration: none;
+	height: 6em;
+	line-height: 1em;
+	padding: 1em;
+	color: lightgrey;
+	border-style: outset;
+	border-color: lightgrey;
+	position: relative;
+}
+
+.experience_list div {
+	float: left;
+	color: darkgrey;
+	margin-right: 1em;
+}
+
+.read_more {
+	position: absolute;
+	bottom: 1em;
+	right: 4em;
+	color: black;
+}
+
+.ex_name {
+	color: black;
+}
+
+.experience_list a:hover {
+	color: black;
+	border-color: darkgrey;
+}
+
+.experience_list a:hover  .read_more{
+	color: purple;
+}
+
+.experience_list a:hover  div {
+	color: black;
+}

@@ -1,16 +1,30 @@
 {% extends 'badicv/base.html' %}
+{% load static %}
 
 {% block name %}Experiences{% endblock %}
 
+{% block style_sheet %} 
+<link rel="stylesheet" type="text/css" href="{% static 'badicv/experience_search.css' %}" />
+{% endblock %} 
+
 {% block content %}
-<form action="{% url 'badicv:experience search' %}" method="get">
+<form class="search_bar" action="{% url 'badicv:experience search' %}" method="get">
 	{{ form }}
 	<input type="submit" value="Search">
 </form>
 
-<ul>
+<ul class="experience_list">
 {% for ex in exes %}
-	<li><a href="/experience/{{ex.name}}/">{{ex.name}}</a></li>
+	<li><a href="/experience/{{ex.name}}/">
+		<div>
+			<u class="ex_name">{{ex.name}}:</u> <br>
+			{{ex.location}} <br>
+			{% if ex.start_date %}{{ex.start_date}}{% endif %}
+			{% if ex.end_date %} to {{ex.end_date}} {% endif %}
+		</div>
+		<i>{{ex.description}}</i>
+		<div class="read_more"><b>click to read more</b></div>
+	</a></li>
 {% endfor %}
 </ul>
 

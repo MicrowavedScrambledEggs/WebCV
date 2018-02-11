@@ -1,17 +1,23 @@
 {% extends 'badicv/base.html' %}
+{% load static %}
 
 {% block name %}Skills{% endblock %}
 
+{% block style_sheet %} 
+<link rel="stylesheet" type="text/css" href="{% static 'badicv/skill_search.css' %}" />
+{% endblock %}  
+
 {% block content %}
 
-<form action="{% url 'badicv:skill search' %}" method="get">
+<form class="search_bar" action="{% url 'badicv:skill search' %}" method="get">
 	{{ form }}
 	<input type="submit" value="Search">
 </form>
 
-<ul>
+<ul class="skill_list">
 {% for skill in skills %}
-	<li><a href="/skill/{{skill.name}}/">{{skill.name}}</a></li>
+	<li><a href="/skill/{{skill.name}}/"><u style="color: black;">{{skill.name}}:</u> <i>
+	{{skill.description}}</i> <div class="read_more"><b>click to read more</b></div></a></li>
 {% endfor %}
 </ul>
 
