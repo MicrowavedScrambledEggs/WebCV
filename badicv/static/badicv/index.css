@@ -21,27 +21,47 @@
 	overflow: auto;
 }
 
-.welcome_menu div {
-	border-style: outset;
-	font-size: 2em;
-}
-
 .welcome_menu  a {
 	display: block;
 	text-decoration: none;
 	padding: 20px;
 	color: black;
+	border-style: outset;
+	border-color: lightgrey;
+	font-size: 2em;
+}
+
+.welcome_menu  a:hover {
+	color: lightgrey;
 }
 
 #skill {
 	background-color: rgba(124, 0, 167, 0.1);
+	border-color: rgba(124, 0, 167, 0.2);
+}
+
+#skill:hover {
+	background-color: rgba(124, 0, 167, 0.6);
+	color: rgb(255, 206, 250);
 }
 
 #exp {
 	background-color: rgba(0, 0, 0, 0.1);
+	border-color: darkgrey;
 	text-align: right;
+}
+
+#exp:hover {
+	background-color: rgba(0, 0, 0, 0.6);
+	color: lightgrey;
 }
 
 #ref {
 	background-color: rgba(124, 0, 167, 0.1);
+	border-color: rgba(124, 0, 167, 0.2);
+}
+
+#ref:hover {
+	background-color: rgba(124, 0, 167, 0.6);
+	color: rgb(255, 206, 250);
 }

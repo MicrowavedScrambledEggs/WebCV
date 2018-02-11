@@ -14,12 +14,12 @@
 	width: 20%;
 }
 
-ul.experience_list  {
+ul.search_list  {
 	padding: 0;
 	list-style-type: none;
 }
 
-.experience_list a {
+.search_list a {
 	display: block;
 	overflow: hidden;
 	width: 100%;
@@ -33,12 +33,6 @@ ul.experience_list  {
 	position: relative;
 }
 
-.experience_list div {
-	float: left;
-	color: darkgrey;
-	margin-right: 1em;
-}
-
 .read_more {
 	position: absolute;
 	bottom: 1em;
@@ -50,16 +44,12 @@ ul.experience_list  {
 	color: black;
 }
 
-.experience_list a:hover {
+.search_list a:hover {
 	color: black;
 	border-color: darkgrey;
 	background-color: rgba(255, 206, 250, 0.4);
 }
 
-.experience_list a:hover  .read_more{
+.search_list a:hover  .read_more{
 	color: purple;
-}
-
-.experience_list a:hover  div {
-	color: black;
 }
