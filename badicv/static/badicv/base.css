@@ -1,5 +1,3 @@
-/* TODO: Decrease reliance on 'magic' numbers, maybe by using javascript */
-			
 html {
 	height: 100%;
 	box-sizing: border-box;
@@ -36,8 +34,28 @@ body {
 }
 
 .title_bar {
-	height: 76px; /* magic_number_1, ideally should automatically be the max 
-					height out of the elements in the title bar*/
+	list-style:none;
+    margin:0;
+    padding:0;
+    text-align:center;
+}
+
+.title_bar > li {
+	display:inline-block;
+	vertical-align: middle;
+}
+
+.title_bar a {
+	display:inline-block;
+	padding: 1em;
+	color: white;
+	text-decoration: none;
+	font-size: 1.375em;
+	background-color: rgb(169, 0, 228);
+}
+
+.title_bar a:hover {
+	background-color: rgba(169, 0, 228, 0.5);
 }
 
 .bottom_bar, .title_bar {
@@ -46,62 +64,22 @@ body {
 	background-color: rgb(124, 0, 167);
 }
 
-.title_menu {
-	width: 500px; /* magic_number_2 */
-	position: absolute;
-	left: 50%;
-	transform: translate(-50%, 0%);
-}
-
-.title_menu ul{
-	list-style-type: none;
-	margin: auto;
-	padding: 0;
-	overflow: hidden;
-	background-color: rgba(124, 0, 100, 0.25);
-}
-
-.title_menu a {
-	display: block;
-	color: white;
-	font-size: 1.375em;
-	text-align: center;
-	text-decoration: none;
-	width: 33%;
-	float: left;
-	height: 76px; /* magic_number_1 */
-	line-height: 76px; /* for vertical text centering */
-	margin: auto;
-}
-
-.title_menu a:hover {
-	background-color: rgba(124, 0, 100, 0.5);
-}
-
 .title {
-	font-size: 2.25em;
-	text-align: right;
-	position: absolute;
-	left: 50%;
-	width: 400px; /* magic_number_3, ideally should automatically be the width 
-					of the title text */
-	/* x translate is 0 - (magic_number_2 / 2) - magic_number_3 - 20 (padding) */
-	transform: translate(-670px, 0%);
-	height: 76px; /* magic_number_1 */
-	line-height: 76px; /* for vertical text centering */ 
+	font-size: 1.625em;
 }
 
 .title a {
 	color: white;
 	text-decoration: none;
+	background-color: rgb(124, 0, 167);
+	padding: 1rem;
+}
+
+.title a:hover {
+	background-color: rgb(124, 0, 167);
 }
 
 .bar_contact {
-	position: absolute;
-	left: 50%;
-	transform: translate(250px, 0%); /* x translate is magic_number_2 / 2 */
-	height: 76px; /* magic_number_1 */
-	line-height: 76px; /* for vertical text centering */ 
 }
 
 .bar_contact ul {
@@ -109,9 +87,13 @@ body {
 	list-style-type: none;
 	font-size: 1.125em;
 	padding-left: 20px;
-    line-height: 1.5;
+    line-height: 1.125em;
     display: inline-block;
     vertical-align: middle;
+}
+
+.bar_contact li {
+	text-align: left;
 }
 
 .content {
