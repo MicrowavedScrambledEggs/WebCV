@@ -19,20 +19,34 @@
 .welcome_menu {
 	width: 100%;
 	overflow: auto;
+	z-index: 1;
+	padding-bottom: 10px;
 }
 
 .welcome_menu  a {
 	display: block;
 	text-decoration: none;
 	padding: 20px;
-	color: black;
-	border-style: outset;
-	border-color: lightgrey;
+	color: rgb(100, 100, 100);
 	font-size: 2em;
 }
 
-.welcome_menu  a:hover {
-	color: lightgrey;
+.welcome_menu:hover {
+	box-shadow: 0 -7px 7px -7px rgba(0,0,0,0.2), 
+	-7px 0 7px -7px rgba(0,0,0,0.2), 7px 0 7px -7px rgba(0,0,0,0.2);
+}
+
+.welcome_menu:hover div:last-child{
+	box-shadow: 0 7px 7px -7px rgba(0,0,0,0.2);
+}
+
+.welcome_menu div:hover {
+	padding: 0 4px 0px 0px;
+}
+
+.welcome_menu a:hover {
+	color: black;
+	box-shadow: 0px 6px 6px 4px rgba(0,0,0,0.2);
 }
 
 #skill {
@@ -40,28 +54,18 @@
 	border-color: rgba(124, 0, 167, 0.2);
 }
 
-#skill:hover {
-	background-color: rgba(124, 0, 167, 0.6);
-	color: rgb(255, 206, 250);
-}
-
 #exp {
 	background-color: rgba(0, 0, 0, 0.1);
-	border-color: darkgrey;
 	text-align: right;
 }
 
 #exp:hover {
-	background-color: rgba(0, 0, 0, 0.6);
-	color: lightgrey;
+	/* To stop the text moving when div "pops out". Unideal as it is magic numbery. 
+		Should maybe use absolute positioning instead? */
+	padding-right: 16px;
 }
 
 #ref {
 	background-color: rgba(124, 0, 167, 0.1);
 	border-color: rgba(124, 0, 167, 0.2);
-}
-
-#ref:hover {
-	background-color: rgba(124, 0, 167, 0.6);
-	color: rgb(255, 206, 250);
 }
