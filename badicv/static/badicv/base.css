@@ -15,6 +15,7 @@ body {
 	padding: 0;
 	min-height: 100%;
 	background-color:rgba(255, 99, 71, 0.15);
+	min-width: 350px;
 }
 
 .background_div {
@@ -40,8 +41,8 @@ body {
     text-align:center;
 }
 
-.title_bar > li {
-	display:inline-block;
+.menu_link, .bar_contact, .title{
+	display: inline-block;
 	vertical-align: middle;
 }
 
@@ -56,6 +57,36 @@ body {
 
 .title_bar a:hover {
 	background-color: rgba(169, 0, 228, 0.5);
+}
+
+.dropdown, .dropdown_content {
+	display: none;
+}
+	
+.dropdown {
+	cursor: pointer;
+}
+
+.dropdown  img{
+	width: 2em;
+	height: 2em;
+	margin: 1em;
+}
+
+.dropdown_content {
+	position: absolute;
+	z-index: 1;
+	padding: 0;
+	background-color: rgb(124, 0, 167);
+	box-shadow: 8px 8px 16px rgba(0,0,0,0.2);
+}
+
+.dropdown_content > .bar_contact {
+	padding: 1em;
+}
+
+.dropdown_content a {
+	width: 100%;
 }
 
 .bottom_bar, .title_bar {
@@ -120,3 +151,36 @@ body {
 .bottom_bar a {
 	color: lightblue;
 }
+
+@media screen and (min-width: 921px) {
+	
+	.bottom_text:before {
+		content: "Take a look at my code for this website and other projects at ";
+	}
+}
+
+@media screen and (max-width: 920px) {
+	
+	.bottom_text:before {
+		content: "Check out ";
+	}
+	
+	.title_bar {
+		text-align: left;
+	}
+	
+	.title_bar > .menu_link, .title_bar > .bar_contact{
+		display: none;
+	}
+	
+	.dropdown, .title {
+		display: inline-block;
+		vertical-align: middle;
+	}
+	
+	.dropdown:hover .dropdown_content, .dropdown:focus .dropdown_content {
+		display: block;
+	}
+	
+}
+	

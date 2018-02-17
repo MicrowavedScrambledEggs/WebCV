@@ -35,9 +35,11 @@ ul.search_list  {
 
 .read_more {
 	position: absolute;
-	bottom: 1em;
+	bottom: 0;
 	right: 4em;
 	color: black;
+	padding: 0.25em 0.75em 0.75em 0.75em;
+	background-color: rgba(255, 255, 255, .5);
 }
 
 .ex_name {
@@ -52,4 +54,5 @@ ul.search_list  {
 
 .search_list a:hover  .read_more{
 	color: purple;
+	background-color: rgba(255, 236, 254, .9);
 }

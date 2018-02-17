@@ -1,7 +1,8 @@
-.search_list div {
+.search_list .vital_stats {
 	float: left;
 	color: darkgrey;
 	margin-right: 1em;
+	height: 100%;
 }
 
 .ex_name {

@@ -17,7 +17,7 @@
 <ul class="search_list">
 {% for ex in exes %}
 	<li><a href="/experience/{{ex.name}}/">
-		<div>
+		<div class="vital_stats">
 			<u class="ex_name">{{ex.name}}:</u> <br>
 			{{ex.location}} <br>
 			{% if ex.start_date %}{{ex.start_date}}{% endif %}
