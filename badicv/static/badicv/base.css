@@ -15,7 +15,7 @@ body {
 	padding: 0;
 	min-height: 100%;
 	background-color:rgba(255, 99, 71, 0.15);
-	min-width: 350px;
+	min-width: 360px;
 }
 
 .background_div {
@@ -27,6 +27,8 @@ body {
 	background-color: white;
 	left: 50%;
 	transform: translate(-50%, 0%);
+	-ms-transform: translate(-50%, 0%);
+	-webkit-transform: translate(-50%, 0%);
 	z-index: -1;
 }
 
@@ -133,6 +135,7 @@ body {
 	font-family: Verdana, Arial, sans-serif;
 	background-color: rgba(0,0,0,0);
 	padding: 2em;
+	padding-bottom: 4em;
 }
 
 .content h1 {
@@ -160,6 +163,10 @@ body {
 }
 
 @media screen and (max-width: 920px) {
+	
+	body {
+		background-color: white;
+	}
 	
 	.bottom_text:before {
 		content: "Check out ";

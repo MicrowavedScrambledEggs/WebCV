@@ -1,17 +1,47 @@
 .content {
 	padding: 0;
+	padding-bottom: 4em;
 }
 
 .search_bar {
 	margin: 20px;
+	margin-bottom: 10px;
+	display: flex;
 }
 
-#id_search_term {
+/* getting the django generated form for the search to look nice.
+   Can't use IDs because that excludes the labels */
+
+.search_bar p {
+	display: flex;
+	float: left;
+	margin: 0;
+}
+ 
+ /* where the user enters the search term*/
+.search_bar p:first-child {
 	width: 60%;
 }
 
+#id_search_term {
+	-webkit-flex: 1;
+}
+
+ /* where the user selects the type. 
+    This css assumes there's only 3 inputs for the form*/
+.search_bar p:nth-child(2){
+	width: 30%;
+	margin: 0 1em;
+}
+
 #id_type {
-	width: 20%;
+	-webkit-flex: 1;
+}
+
+ /* the search button. This css assumes that there is only one search button*/
+.search_bar input[type="submit"] {
+	width: 10%;
+	float: right;
 }
 
 ul.search_list  {
@@ -28,8 +58,7 @@ ul.search_list  {
 	line-height: 1em;
 	padding: 1em;
 	color: lightgrey;
-	border-style: outset;
-	border-color: lightgrey;
+	box-shadow: 0px 2px 2px rgba(0,0,0,0.3);
 	position: relative;
 }
 
@@ -50,9 +79,42 @@ ul.search_list  {
 	color: black;
 	border-color: darkgrey;
 	background-color: rgba(255, 206, 250, 0.4);
+	box-shadow: 4px 4px 4px rgba(0,0,0,0.4);
 }
 
 .search_list a:hover  .read_more{
 	color: purple;
 	background-color: rgba(255, 236, 254, .9);
+}
+
+@media screen and (max-width: 700px) {
+	
+	/* getting the django generated form for the search to look nice.
+   Can't use IDs because that excludes the labels */
+	
+	.search_bar {
+		display: flex;
+		flex-wrap: wrap;
+	}
+	
+	 /* where the user enters the search term*/
+	.search_bar p:first-child {
+		width: 100%;
+	}
+	
+	 /* where the user selects the type. 
+    This css assumes there's only 3 inputs for the form*/
+	
+	.search_bar p:nth-child(2) {
+		margin: 0;
+		margin-right: 3%;
+		flex: 1;
+	}
+	
+	 /* the search button. This css assumes that there is only one search button*/
+	.search_bar input[type="submit"] {
+		width: 15%;
+		min-width: 56px;
+		float: right;
+	}
 }
